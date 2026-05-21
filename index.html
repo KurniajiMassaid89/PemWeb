@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Akademia — Portal Mahasiswa Modern</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    /* ========== RESET & BASE ========== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --navy:      #0f1f3d;
+      --navy-mid:  #1a3260;
+      --blue:      #2563eb;
+      --blue-mid:  #3b82f6;
+      --blue-lt:   #dbeafe;
+      --sky:       #e0f2fe;
+      --white:     #ffffff;
+      --gray-50:   #f8fafc;
+      --gray-100:  #f1f5f9;
+      --gray-300:  #cbd5e1;
+      --gray-500:  #64748b;
+      --gray-700:  #334155;
+      --accent:    #f59e0b;
+      --grad-hero: linear-gradient(135deg, #e0f2fe 0%, #ede9fe 40%, #fce7f3 100%);
+      --grad-cta:  linear-gradient(135deg, #1a3260 0%, #2563eb 60%, #3b82f6 100%);
+      --shadow-sm: 0 2px 8px rgba(15,31,61,.06);
+      --shadow-md: 0 8px 32px rgba(15,31,61,.10);
+      --shadow-lg: 0 20px 64px rgba(15,31,61,.14);
+      --r-sm: 12px;
+      --r-md: 20px;
+      --r-lg: 28px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; color: var(--navy); background: var(--white); overflow-x: hidden; }
+
+    .container { max-width: 1180px; margin: 0 auto; padding: 0 28px; }
+
+    /* ========== NAVBAR ========== */
+    #navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: rgba(255,255,255,.85);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid transparent;
+      transition: border-color .3s, box-shadow .3s;
+    }
+    #navbar.scrolled { border-color: var(--gray-100); box-shadow: var(--shadow-sm); }
+    .nav-inner { display: flex; align-items: center; height: 72px; gap: 0; }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; margin-right: auto; }
+    .nav-logo-icon {
+      width: 38px; height: 38px; background: var(--grad-cta);
+      border-radius: 10px; display: grid; place-items: center;
+    }
+    .nav-logo-icon i { color: #fff; font-size: 16px; }
+    .nav-logo-text { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 800; color: var(--navy); letter-spacing: -.3px; }
+    .nav-menu { display: flex; gap: 6px; list-style: none; margin-right: 24px; }
+    .nav-menu a { display: block; padding: 8px 14px; font-size: 14px; font-weight: 500; color: var(--gray-700); text-decoration: none; border-radius: 8px; transition: color .2s, background .2s; }
+    .nav-menu a:hover { color: var(--blue); background: var(--blue-lt); }
+    .nav-actions { display: flex; gap: 10px; align-items: center; }
+    .btn-ghost { padding: 9px 20px; font-size: 14px; font-weight: 600; color: var(--navy); background: transparent; border: 1.5px solid var(--gray-300); border-radius: 10px; cursor: pointer; transition: all .2s; text-decoration: none; }
+    .btn-ghost:hover { border-color: var(--blue); color: var(--blue); }
+    .btn-primary { padding: 9px 22px; font-size: 14px; font-weight: 600; color: #fff; background: var(--blue); border: none; border-radius: 10px; cursor: pointer; transition: all .2s; text-decoration: none; box-shadow: 0 4px 16px rgba(37,99,235,.3); }
+    .btn-primary:hover { background: var(--navy-mid); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(37,99,235,.35); }
+    .nav-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 4px; }
+    .nav-hamburger span { display: block; width: 24px; height: 2px; background: var(--navy); border-radius: 2px; transition: all .3s; }
+    .nav-hamburger span + span { margin-top: 5px; }
+
+    /* ========== HERO ========== */
+    #hero {
+      min-height: 100vh; display: flex; align-items: center;
+      background: var(--grad-hero);
+      padding-top: 72px; position: relative; overflow: hidden;
+    }
+    .hero-blob {
+      position: absolute; border-radius: 50%; filter: blur(80px); opacity: .45; pointer-events: none;
+    }
+    .hero-blob-1 { width: 500px; height: 500px; background: #93c5fd; top: -120px; right: -100px; }
+    .hero-blob-2 { width: 350px; height: 350px; background: #c4b5fd; bottom: 60px; left: -80px; }
+    .hero-inner { display: flex; align-items: center; gap: 60px; padding: 80px 0; position: relative; z-index: 1; }
+    .hero-content { flex: 1; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(37,99,235,.1); color: var(--blue); font-size: 13px; font-weight: 600; padding: 7px 16px; border-radius: 100px; margin-bottom: 28px; border: 1px solid rgba(37,99,235,.15); }
+    .hero-badge i { font-size: 11px; }
+    .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(38px, 5vw, 62px); font-weight: 800; line-height: 1.1; color: var(--navy); margin-bottom: 22px; }
+    .hero-title span { color: var(--blue); }
+    .hero-sub { font-size: 17px; line-height: 1.7; color: var(--gray-500); max-width: 460px; margin-bottom: 40px; font-weight: 400; }
+    .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn-hero-primary { padding: 15px 32px; font-size: 15px; font-weight: 600; color: #fff; background: var(--blue); border: none; border-radius: var(--r-sm); cursor: pointer; text-decoration: none; box-shadow: 0 8px 28px rgba(37,99,235,.35); transition: all .25s; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-hero-primary:hover { background: var(--navy-mid); transform: translateY(-2px); box-shadow: 0 14px 36px rgba(37,99,235,.4); }
+    .btn-hero-ghost { padding: 15px 30px; font-size: 15px; font-weight: 600; color: var(--navy); background: rgba(255,255,255,.7); border: 1.5px solid rgba(255,255,255,.8); border-radius: var(--r-sm); cursor: pointer; text-decoration: none; backdrop-filter: blur(6px); transition: all .25s; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-hero-ghost:hover { background: #fff; box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .hero-stats { display: flex; gap: 32px; margin-top: 52px; padding-top: 40px; border-top: 1px solid rgba(15,31,61,.08); }
+    .hero-stat-num { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 800; color: var(--navy); }
+    .hero-stat-label { font-size: 13px; color: var(--gray-500); margin-top: 2px; }
+    .hero-visual { flex: 0 0 420px; position: relative; }
+    .hero-img-wrap {
+      width: 420px; height: 480px; border-radius: var(--r-lg); overflow: hidden;
+      box-shadow: var(--shadow-lg); position: relative;
+    }
+    .hero-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    .hero-float-card {
+      position: absolute; background: #fff; border-radius: var(--r-sm); padding: 14px 18px;
+      box-shadow: var(--shadow-md); display: flex; align-items: center; gap: 12px;
+    }
+    .hero-float-card.card-a { bottom: -16px; left: -30px; }
+    .hero-float-card.card-b { top: 30px; right: -30px; }
+    .float-icon { width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center; flex-shrink: 0; }
+    .float-icon.green { background: #dcfce7; color: #16a34a; }
+    .float-icon.orange { background: #fef3c7; color: #d97706; }
+    .float-label { font-size: 11px; color: var(--gray-500); }
+    .float-value { font-size: 15px; font-weight: 700; color: var(--navy); }
+
+    /* ========== STATS STRIP ========== */
+    #stats { padding: 0 0 80px; margin-top: -20px; position: relative; z-index: 2; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .stat-card {
+      background: #fff; border-radius: var(--r-md); padding: 28px 24px;
+      box-shadow: var(--shadow-md); display: flex; align-items: center; gap: 18px;
+      transition: transform .3s, box-shadow .3s; border: 1px solid var(--gray-100);
+    }
+    .stat-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+    .stat-icon { width: 52px; height: 52px; border-radius: var(--r-sm); display: grid; place-items: center; flex-shrink: 0; font-size: 20px; }
+    .stat-icon.si1 { background: #eff6ff; color: #2563eb; }
+    .stat-icon.si2 { background: #f0fdf4; color: #16a34a; }
+    .stat-icon.si3 { background: #fef9c3; color: #ca8a04; }
+    .stat-icon.si4 { background: #fdf4ff; color: #9333ea; }
+    .stat-num { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 800; color: var(--navy); }
+    .stat-desc { font-size: 13px; color: var(--gray-500); margin-top: 2px; }
+
+    /* ========== SECTION HEADER ========== */
+    .sec-header { text-align: center; margin-bottom: 56px; }
+    .sec-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; }
+    .sec-tag::before, .sec-tag::after { content: ''; width: 24px; height: 1.5px; background: var(--blue); border-radius: 2px; }
+    .sec-title { font-family: 'Playfair Display', serif; font-size: clamp(28px, 4vw, 42px); font-weight: 800; color: var(--navy); margin-bottom: 16px; line-height: 1.2; }
+    .sec-sub { font-size: 16px; color: var(--gray-500); max-width: 520px; margin: 0 auto; line-height: 1.7; }
+
+    /* ========== KEUNGGULAN ========== */
+    #keunggulan { padding: 100px 0; background: var(--gray-50); }
+    .keunggulan-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+    .keunggulan-card {
+      background: #fff; border-radius: var(--r-md); padding: 36px 28px;
+      border: 1px solid var(--gray-100); box-shadow: var(--shadow-sm);
+      transition: transform .3s, box-shadow .3s;
+      position: relative; overflow: hidden;
+    }
+    .keunggulan-card::before { content: ''; position: absolute; inset: 0; background: var(--grad-cta); opacity: 0; transition: opacity .3s; border-radius: var(--r-md); }
+    .keunggulan-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); }
+    .keunggulan-card:hover::before { opacity: 1; }
+    .keunggulan-card:hover .k-num,
+    .keunggulan-card:hover .k-title,
+    .keunggulan-card:hover .k-desc { color: rgba(255,255,255,.9); }
+    .keunggulan-card:hover .k-icon-wrap { background: rgba(255,255,255,.15); color: #fff; }
+    .k-num { font-family: 'Playfair Display', serif; font-size: 52px; font-weight: 800; color: var(--gray-100); line-height: 1; margin-bottom: 16px; position: relative; z-index: 1; transition: color .3s; }
+    .k-icon-wrap { width: 48px; height: 48px; background: var(--blue-lt); color: var(--blue); border-radius: 12px; display: grid; place-items: center; font-size: 18px; margin-bottom: 18px; position: relative; z-index: 1; transition: background .3s, color .3s; }
+    .k-title { font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 10px; position: relative; z-index: 1; transition: color .3s; }
+    .k-desc { font-size: 14px; color: var(--gray-500); line-height: 1.7; position: relative; z-index: 1; transition: color .3s; }
+
+    /* ========== PROGRAM STUDI ========== */
+    #program { padding: 100px 0; }
+    .program-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .program-card {
+      border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--gray-100);
+      box-shadow: var(--shadow-sm); transition: transform .3s, box-shadow .3s; background: #fff;
+    }
+    .program-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); }
+    .program-img { height: 180px; overflow: hidden; position: relative; }
+    .program-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+    .program-card:hover .program-img img { transform: scale(1.06); }
+    .program-img-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(15,31,61,.5), transparent); }
+    .program-body { padding: 24px; }
+    .program-tag { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--blue); background: var(--blue-lt); padding: 4px 12px; border-radius: 100px; margin-bottom: 12px; }
+    .program-name { font-size: 17px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+    .program-desc { font-size: 13px; color: var(--gray-500); line-height: 1.65; margin-bottom: 18px; }
+    .program-footer { display: flex; align-items: center; justify-content: space-between; }
+    .program-meta { font-size: 12px; color: var(--gray-500); display: flex; align-items: center; gap: 4px; }
+    .btn-detail { font-size: 13px; font-weight: 600; color: var(--blue); text-decoration: none; display: flex; align-items: center; gap: 5px; transition: gap .2s; }
+    .btn-detail:hover { gap: 9px; }
+
+    /* ========== KEGIATAN ========== */
+    #kegiatan { padding: 100px 0; background: var(--gray-50); }
+    .kegiatan-grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: auto auto; gap: 20px; }
+    .kegiatan-item {
+      border-radius: var(--r-md); overflow: hidden; position: relative; cursor: pointer;
+      box-shadow: var(--shadow-sm);
+    }
+    .kegiatan-item.large { grid-column: span 2; grid-row: span 2; }
+    .kegiatan-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .4s; min-height: 220px; }
+    .kegiatan-item.large img { min-height: 460px; }
+    .kegiatan-item:hover img { transform: scale(1.06); }
+    .kegiatan-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(15,31,61,.75) 0%, rgba(15,31,61,.1) 60%, transparent 100%);
+      display: flex; flex-direction: column; justify-content: flex-end; padding: 24px;
+      opacity: 0; transition: opacity .3s;
+    }
+    .kegiatan-item:hover .kegiatan-overlay { opacity: 1; }
+    .kegiatan-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,.7); margin-bottom: 6px; }
+    .kegiatan-title { font-size: 16px; font-weight: 700; color: #fff; line-height: 1.3; }
+
+    /* ========== TESTIMONI ========== */
+    #testimoni { padding: 100px 0; }
+    .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .testi-card {
+      background: #fff; border-radius: var(--r-md); padding: 32px 28px;
+      border: 1px solid var(--gray-100); box-shadow: var(--shadow-sm);
+      transition: transform .3s, box-shadow .3s;
+    }
+    .testi-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); }
+    .testi-stars { color: var(--accent); font-size: 13px; margin-bottom: 16px; letter-spacing: 2px; }
+    .testi-quote { font-size: 15px; color: var(--gray-700); line-height: 1.75; margin-bottom: 24px; font-style: italic; }
+    .testi-profile { display: flex; align-items: center; gap: 14px; border-top: 1px solid var(--gray-100); padding-top: 20px; }
+    .testi-avatar { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; border: 2px solid var(--blue-lt); flex-shrink: 0; }
+    .testi-name { font-size: 14px; font-weight: 700; color: var(--navy); }
+    .testi-jurusan { font-size: 12px; color: var(--gray-500); margin-top: 2px; }
+
+    /* ========== CTA BANNER ========== */
+    #cta { padding: 100px 0; }
+    .cta-box {
+      background: var(--grad-cta); border-radius: var(--r-lg); padding: 80px 60px;
+      text-align: center; position: relative; overflow: hidden;
+      box-shadow: 0 24px 80px rgba(37,99,235,.3);
+    }
+    .cta-box::before {
+      content: ''; position: absolute;
+      width: 600px; height: 600px; border-radius: 50%;
+      background: rgba(255,255,255,.04); top: -200px; right: -100px;
+    }
+    .cta-box::after {
+      content: ''; position: absolute;
+      width: 400px; height: 400px; border-radius: 50%;
+      background: rgba(255,255,255,.05); bottom: -150px; left: -80px;
+    }
+    .cta-tag { display: inline-block; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,255,255,.65); margin-bottom: 18px; }
+    .cta-title { font-family: 'Playfair Display', serif; font-size: clamp(30px, 4vw, 48px); font-weight: 800; color: #fff; margin-bottom: 18px; line-height: 1.2; position: relative; z-index: 1; }
+    .cta-sub { font-size: 16px; color: rgba(255,255,255,.75); max-width: 480px; margin: 0 auto 40px; line-height: 1.7; position: relative; z-index: 1; }
+    .cta-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; position: relative; z-index: 1; }
+    .btn-cta-white { padding: 15px 36px; font-size: 15px; font-weight: 700; color: var(--blue); background: #fff; border: none; border-radius: var(--r-sm); cursor: pointer; text-decoration: none; box-shadow: 0 8px 28px rgba(0,0,0,.15); transition: all .25s; }
+    .btn-cta-white:hover { transform: translateY(-2px); box-shadow: 0 14px 36px rgba(0,0,0,.2); }
+    .btn-cta-ghost { padding: 15px 32px; font-size: 15px; font-weight: 600; color: #fff; background: rgba(255,255,255,.12); border: 1.5px solid rgba(255,255,255,.35); border-radius: var(--r-sm); cursor: pointer; text-decoration: none; transition: all .25s; backdrop-filter: blur(6px); }
+    .btn-cta-ghost:hover { background: rgba(255,255,255,.2); transform: translateY(-2px); }
+
+    /* ========== FOOTER ========== */
+    #footer { background: var(--navy); color: rgba(255,255,255,.65); }
+    .footer-main { display: grid; grid-template-columns: 1.8fr 1fr 1fr 1fr; gap: 48px; padding: 72px 0 56px; }
+    .footer-brand-text { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; }
+    .footer-brand-icon { width: 34px; height: 34px; background: var(--blue); border-radius: 8px; display: grid; place-items: center; }
+    .footer-brand-icon i { color: #fff; font-size: 14px; }
+    .footer-desc { font-size: 14px; line-height: 1.75; margin-bottom: 24px; }
+    .footer-socials { display: flex; gap: 10px; }
+    .social-btn { width: 38px; height: 38px; border-radius: 10px; background: rgba(255,255,255,.08); display: grid; place-items: center; color: rgba(255,255,255,.6); font-size: 14px; text-decoration: none; transition: all .2s; }
+    .social-btn:hover { background: var(--blue); color: #fff; transform: translateY(-2px); }
+    .footer-col-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: rgba(255,255,255,.9); margin-bottom: 20px; }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a { font-size: 14px; color: rgba(255,255,255,.55); text-decoration: none; transition: color .2s; }
+    .footer-links a:hover { color: #fff; }
+    .footer-contact-item { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 14px; }
+    .footer-contact-item i { color: var(--blue-mid); font-size: 14px; margin-top: 2px; flex-shrink: 0; }
+    .footer-contact-item span { font-size: 14px; line-height: 1.6; }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,.08); padding: 24px 0; display: flex; align-items: center; justify-content: space-between; }
+    .footer-copy { font-size: 13px; }
+    .footer-bottom-links { display: flex; gap: 20px; }
+    .footer-bottom-links a { font-size: 13px; color: rgba(255,255,255,.45); text-decoration: none; transition: color .2s; }
+    .footer-bottom-links a:hover { color: #fff; }
+
+    /* ========== BACK TO TOP ========== */
+    #backTop {
+      position: fixed; bottom: 32px; right: 32px; width: 44px; height: 44px;
+      background: var(--blue); color: #fff; border-radius: 50%; border: none;
+      display: grid; place-items: center; font-size: 16px; cursor: pointer;
+      box-shadow: 0 6px 24px rgba(37,99,235,.35); opacity: 0; pointer-events: none;
+      transition: opacity .3s, transform .3s; z-index: 999;
+    }
+    #backTop.visible { opacity: 1; pointer-events: auto; }
+    #backTop:hover { transform: translateY(-3px); }
+
+    /* ========== MOBILE MENU ========== */
+    .mobile-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(15,31,61,.5); z-index: 998; backdrop-filter: blur(4px);
+    }
+    .mobile-menu {
+      display: none; position: fixed; top: 72px; left: 0; right: 0; background: #fff;
+      z-index: 999; box-shadow: var(--shadow-md); padding: 24px 28px; border-bottom-left-radius: var(--r-md); border-bottom-right-radius: var(--r-md);
+    }
+    .mobile-menu.open, .mobile-overlay.open { display: block; }
+    .mobile-nav-links { list-style: none; margin-bottom: 16px; }
+    .mobile-nav-links li + li { border-top: 1px solid var(--gray-100); }
+    .mobile-nav-links a { display: block; padding: 13px 0; font-size: 15px; font-weight: 500; color: var(--navy); text-decoration: none; }
+    .mobile-cta { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+    .mobile-cta .btn-ghost, .mobile-cta .btn-primary { text-align: center; padding: 12px; }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 1024px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .keunggulan-grid { grid-template-columns: repeat(2, 1fr); }
+      .program-grid { grid-template-columns: repeat(2, 1fr); }
+      .testi-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-main { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      .nav-menu, .nav-actions { display: none; }
+      .nav-hamburger { display: flex; flex-direction: column; }
+      .hero-inner { flex-direction: column; padding: 50px 0 40px; gap: 40px; }
+      .hero-visual { width: 100%; flex: unset; }
+      .hero-img-wrap { width: 100%; height: 320px; }
+      .hero-float-card.card-b { right: 10px; }
+      .hero-stats { gap: 20px; flex-wrap: wrap; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+      .keunggulan-grid { grid-template-columns: 1fr; }
+      .program-grid { grid-template-columns: 1fr; }
+      .kegiatan-grid { grid-template-columns: 1fr; }
+      .kegiatan-item.large { grid-column: span 1; grid-row: span 1; }
+      .kegiatan-item.large img { min-height: 260px; }
+      .kegiatan-overlay { opacity: 1; }
+      .testi-grid { grid-template-columns: 1fr; }
+      .cta-box { padding: 56px 28px; }
+      .footer-main { grid-template-columns: 1fr; gap: 32px; }
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+    }
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <div class="nav-logo-icon"><i class="fas fa-graduation-cap"></i></div>
+        <span class="nav-logo-text">Akademia</span>
+      </a>
+      <ul class="nav-menu">
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#keunggulan">Tentang</a></li>
+        <li><a href="#program">Program</a></li>
+        <li><a href="#kegiatan">Kegiatan</a></li>
+        <li><a href="#testimoni">Prestasi</a></li>
+        <li><a href="#footer">Kontak</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="#" class="btn-ghost">Sign In</a>
+        <a href="#" class="btn-primary">Sign Up</a>
+      </div>
+      <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-overlay" id="mobileOverlay"></div>
+<div class="mobile-menu" id="mobileMenu">
+  <ul class="mobile-nav-links">
+    <li><a href="#hero" class="mobile-link">Home</a></li>
+    <li><a href="#keunggulan" class="mobile-link">Tentang</a></li>
+    <li><a href="#program" class="mobile-link">Program</a></li>
+    <li><a href="#kegiatan" class="mobile-link">Kegiatan</a></li>
+    <li><a href="#testimoni" class="mobile-link">Prestasi</a></li>
+    <li><a href="#footer" class="mobile-link">Kontak</a></li>
+  </ul>
+  <div class="mobile-cta">
+    <a href="#" class="btn-ghost">Sign In</a>
+    <a href="#" class="btn-primary">Sign Up</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-blob hero-blob-1"></div>
+  <div class="hero-blob hero-blob-2"></div>
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-content">
+        <div class="hero-badge"><i class="fas fa-star"></i> Platform Pendidikan Terbaik 2024</div>
+        <h1 class="hero-title">Bangun Masa Depan <span>Akademik</span> Bersama Kami</h1>
+        <p class="hero-sub">Bergabunglah dengan ribuan mahasiswa berprestasi. Raih potensi terbaik Anda melalui program unggulan, fasilitas modern, dan komunitas akademik yang inspiratif.</p>
+        <div class="hero-cta">
+          <a href="#program" class="btn-hero-primary">Jelajahi Program <i class="fas fa-arrow-right"></i></a>
+          <a href="#cta" class="btn-hero-ghost"><i class="fas fa-play-circle"></i> Daftar Sekarang</a>
+        </div>
+        <div class="hero-stats">
+          <div>
+            <div class="hero-stat-num">500+</div>
+            <div class="hero-stat-label">Mahasiswa Aktif</div>
+          </div>
+          <div>
+            <div class="hero-stat-num">98%</div>
+            <div class="hero-stat-label">Tingkat Kepuasan</div>
+          </div>
+          <div>
+            <div class="hero-stat-num">80+</div>
+            <div class="hero-stat-label">Prestasi Nasional</div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-img-wrap">
+          <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&auto=format&fit=crop&q=80" alt="Mahasiswa berprestasi" loading="lazy" />
+        </div>
+        <div class="hero-float-card card-a">
+          <div class="float-icon green"><i class="fas fa-trophy"></i></div>
+          <div>
+            <div class="float-label">Pencapaian Terbaru</div>
+            <div class="float-value">Juara 1 Nasional</div>
+          </div>
+        </div>
+        <div class="hero-float-card card-b">
+          <div class="float-icon orange"><i class="fas fa-users"></i></div>
+          <div>
+            <div class="float-label">Komunitas Aktif</div>
+            <div class="float-value">50+ Organisasi</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section id="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon si1"><i class="fas fa-book-open"></i></div>
+        <div>
+          <div class="stat-num">500+</div>
+          <div class="stat-desc">Mahasiswa Aktif</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon si2"><i class="fas fa-layer-group"></i></div>
+        <div>
+          <div class="stat-num">120+</div>
+          <div class="stat-desc">Program Akademik</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon si3"><i class="fas fa-medal"></i></div>
+        <div>
+          <div class="stat-num">80+</div>
+          <div class="stat-desc">Prestasi Mahasiswa</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon si4"><i class="fas fa-users"></i></div>
+        <div>
+          <div class="stat-num">50+</div>
+          <div class="stat-desc">Organisasi Kampus</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KEUNGGULAN -->
+<section id="keunggulan">
+  <div class="container">
+    <div class="sec-header">
+      <div class="sec-tag">Keunggulan Kami</div>
+      <h2 class="sec-title">Kenapa Memilih Kampus Kami?</h2>
+      <p class="sec-sub">Kami hadir dengan pendekatan pendidikan modern yang mempersiapkan mahasiswa untuk menghadapi tantangan masa depan.</p>
+    </div>
+    <div class="keunggulan-grid">
+      <div class="keunggulan-card">
+        <div class="k-num">01</div>
+        <div class="k-icon-wrap"><i class="fas fa-chalkboard-teacher"></i></div>
+        <div class="k-title">Dosen Profesional</div>
+        <div class="k-desc">Tim pengajar berpengalaman dan tersertifikasi dengan keahlian industri nyata untuk membimbing perjalanan akademik Anda.</div>
+      </div>
+      <div class="keunggulan-card">
+        <div class="k-num">02</div>
+        <div class="k-icon-wrap"><i class="fas fa-building"></i></div>
+        <div class="k-title">Fasilitas Modern</div>
+        <div class="k-desc">Laboratorium canggih, perpustakaan digital, dan ruang kolaborasi yang dirancang untuk mendukung proses pembelajaran optimal.</div>
+      </div>
+      <div class="keunggulan-card">
+        <div class="k-num">03</div>
+        <div class="k-icon-wrap"><i class="fas fa-laptop-code"></i></div>
+        <div class="k-title">Pembelajaran Digital</div>
+        <div class="k-desc">Platform e-learning inovatif dengan akses materi 24/7, video kuliah, dan sistem penilaian digital yang komprehensif.</div>
+      </div>
+      <div class="keunggulan-card">
+        <div class="k-num">04</div>
+        <div class="k-icon-wrap"><i class="fas fa-briefcase"></i></div>
+        <div class="k-title">Dukungan Karir</div>
+        <div class="k-desc">Biro karir aktif dengan jaringan mitra industri luas, program magang, dan pembekalan kerja untuk lulusan siap pakai.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAM STUDI -->
+<section id="program">
+  <div class="container">
+    <div class="sec-header">
+      <div class="sec-tag">Program Studi</div>
+      <h2 class="sec-title">Temukan Jurusan Impian Anda</h2>
+      <p class="sec-sub">Pilih dari berbagai program studi terakreditasi yang dirancang sesuai kebutuhan industri masa kini dan masa depan.</p>
+    </div>
+    <div class="program-grid">
+      <div class="program-card">
+        <div class="program-img">
+          <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=600&auto=format&fit=crop&q=75" alt="Teknik Informatika" loading="lazy" />
+          <div class="program-img-overlay"></div>
+        </div>
+        <div class="program-body">
+          <span class="program-tag">S1 · 4 Tahun</span>
+          <div class="program-name">Teknik Informatika</div>
+          <div class="program-desc">Mempelajari algoritma, pemrograman, kecerdasan buatan, dan pengembangan perangkat lunak modern.</div>
+          <div class="program-footer">
+            <span class="program-meta"><i class="fas fa-users"></i> 180 Mahasiswa</span>
+            <a href="#" class="btn-detail">Lihat Detail <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="program-card">
+        <div class="program-img">
+          <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&auto=format&fit=crop&q=75" alt="Sistem Informasi" loading="lazy" />
+          <div class="program-img-overlay"></div>
+        </div>
+        <div class="program-body">
+          <span class="program-tag">S1 · 4 Tahun</span>
+          <div class="program-name">Sistem Informasi</div>
+          <div class="program-desc">Mengintegrasikan teknologi dan bisnis untuk merancang sistem informasi yang efektif dan strategis.</div>
+          <div class="program-footer">
+            <span class="program-meta"><i class="fas fa-users"></i> 150 Mahasiswa</span>
+            <a href="#" class="btn-detail">Lihat Detail <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="program-card">
+        <div class="program-img">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&auto=format&fit=crop&q=75" alt="Manajemen" loading="lazy" />
+          <div class="program-img-overlay"></div>
+        </div>
+        <div class="program-body">
+          <span class="program-tag">S1 · 4 Tahun</span>
+          <div class="program-name">Manajemen</div>
+          <div class="program-desc">Membangun kompetensi kepemimpinan, strategi bisnis, dan manajemen sumber daya manusia yang unggul.</div>
+          <div class="program-footer">
+            <span class="program-meta"><i class="fas fa-users"></i> 200 Mahasiswa</span>
+            <a href="#" class="btn-detail">Lihat Detail <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="program-card">
+        <div class="program-img">
+          <img src="https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=600&auto=format&fit=crop&q=75" alt="DKV" loading="lazy" />
+          <div class="program-img-overlay"></div>
+        </div>
+        <div class="program-body">
+          <span class="program-tag">S1 · 4 Tahun</span>
+          <div class="program-name">Desain Komunikasi Visual</div>
+          <div class="program-desc">Mengembangkan kreativitas visual melalui desain grafis, branding, UI/UX, dan media komunikasi digital.</div>
+          <div class="program-footer">
+            <span class="program-meta"><i class="fas fa-users"></i> 120 Mahasiswa</span>
+            <a href="#" class="btn-detail">Lihat Detail <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="program-card">
+        <div class="program-img">
+          <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&auto=format&fit=crop&q=75" alt="Teknik Industri" loading="lazy" />
+          <div class="program-img-overlay"></div>
+        </div>
+        <div class="program-body">
+          <span class="program-tag">S1 · 4 Tahun</span>
+          <div class="program-name">Teknik Industri</div>
+          <div class="program-desc">Mengoptimalkan sistem produksi dan operasional industri dengan pendekatan rekayasa yang sistematis.</div>
+          <div class="program-footer">
+            <span class="program-meta"><i class="fas fa-users"></i> 140 Mahasiswa</span>
+            <a href="#" class="btn-detail">Lihat Detail <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="program-card">
+        <div class="program-img">
+          <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600&auto=format&fit=crop&q=75" alt="Akuntansi" loading="lazy" />
+          <div class="program-img-overlay"></div>
+        </div>
+        <div class="program-body">
+          <span class="program-tag">S1 · 4 Tahun</span>
+          <div class="program-name">Akuntansi</div>
+          <div class="program-desc">Memahami laporan keuangan, perpajakan, audit, dan pengelolaan keuangan untuk karir di bidang bisnis dan keuangan.</div>
+          <div class="program-footer">
+            <span class="program-meta"><i class="fas fa-users"></i> 160 Mahasiswa</span>
+            <a href="#" class="btn-detail">Lihat Detail <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KEGIATAN -->
+<section id="kegiatan">
+  <div class="container">
+    <div class="sec-header">
+      <div class="sec-tag">Kehidupan Kampus</div>
+      <h2 class="sec-title">Kegiatan Mahasiswa</h2>
+      <p class="sec-sub">Kehidupan kampus yang dinamis dengan beragam kegiatan yang memperkaya pengalaman dan mengembangkan potensi diri.</p>
+    </div>
+    <div class="kegiatan-grid">
+      <div class="kegiatan-item large">
+        <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=900&auto=format&fit=crop&q=75" alt="Seminar Nasional" loading="lazy" />
+        <div class="kegiatan-overlay">
+          <div class="kegiatan-label">Seminar</div>
+          <div class="kegiatan-title">Seminar Nasional Teknologi & Inovasi 2024</div>
+        </div>
+      </div>
+      <div class="kegiatan-item">
+        <img src="https://images.unsplash.com/photo-1527529482837-4698179dc6ce?w=600&auto=format&fit=crop&q=75" alt="Lomba" loading="lazy" />
+        <div class="kegiatan-overlay">
+          <div class="kegiatan-label">Kompetisi</div>
+          <div class="kegiatan-title">Lomba Karya Ilmiah Mahasiswa</div>
+        </div>
+      </div>
+      <div class="kegiatan-item">
+        <img src="https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=600&auto=format&fit=crop&q=75" alt="Workshop" loading="lazy" />
+        <div class="kegiatan-overlay">
+          <div class="kegiatan-label">Workshop</div>
+          <div class="kegiatan-title">Workshop Digital Marketing & Branding</div>
+        </div>
+      </div>
+      <div class="kegiatan-item">
+        <img src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=600&auto=format&fit=crop&q=75" alt="Volunteering" loading="lazy" />
+        <div class="kegiatan-overlay">
+          <div class="kegiatan-label">Sosial</div>
+          <div class="kegiatan-title">Program Bakti Sosial Komunitas</div>
+        </div>
+      </div>
+      <div class="kegiatan-item">
+        <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&auto=format&fit=crop&q=75" alt="Organisasi" loading="lazy" />
+        <div class="kegiatan-overlay">
+          <div class="kegiatan-label">Organisasi</div>
+          <div class="kegiatan-title">Pelantikan BEM & UKM Mahasiswa</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONI -->
+<section id="testimoni">
+  <div class="container">
+    <div class="sec-header">
+      <div class="sec-tag">Suara Mahasiswa</div>
+      <h2 class="sec-title">Apa Kata Mereka?</h2>
+      <p class="sec-sub">Dengarkan pengalaman nyata dari mahasiswa kami yang telah merasakan manfaat berkuliah di Akademia.</p>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">"Kuliah di sini benar-benar mengubah cara pandang saya. Dosen-dosennya sangat supportif dan fasilitasnya lengkap. Saya berhasil magang di perusahaan teknologi top berkat bimbingan dari kampus."</p>
+        <div class="testi-profile">
+          <img class="testi-avatar" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80" alt="Rizal Ahmad" />
+          <div>
+            <div class="testi-name">Rizal Ahmad Fauzi</div>
+            <div class="testi-jurusan">Teknik Informatika, 2022</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">"Program DKV di sini luar biasa! Portofolio saya berkembang pesat. Saya menangkan 3 kompetisi desain nasional selama kuliah. Komunitas kreatifnya sangat menginspirasi dan kolaboratif."</p>
+        <div class="testi-profile">
+          <img class="testi-avatar" src="https://images.unsplash.com/photo-1494790108755-2616b612b5e5?w=100&auto=format&fit=crop&q=80" alt="Sari Dewi" />
+          <div>
+            <div class="testi-name">Sari Dewi Pratiwi</div>
+            <div class="testi-jurusan">Desain Komunikasi Visual, 2021</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">"Biro karir kampus membantu saya mendapat pekerjaan sebelum wisuda. Jaringan alumni yang kuat dan program internship yang terstruktur menjadi nilai plus yang sangat berharga bagi saya."</p>
+        <div class="testi-profile">
+          <img class="testi-avatar" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&auto=format&fit=crop&q=80" alt="Budi Santoso" />
+          <div>
+            <div class="testi-name">Budi Santoso</div>
+            <div class="testi-jurusan">Manajemen, 2020</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<section id="cta">
+  <div class="container">
+    <div class="cta-box">
+      <div class="cta-tag">Mulai Perjalanan Anda</div>
+      <h2 class="cta-title">Siap Menjadi Mahasiswa Berprestasi?</h2>
+      <p class="cta-sub">Bergabunglah dengan ribuan mahasiswa yang telah membuktikan bahwa Akademia adalah tempat terbaik untuk meraih impian akademik Anda.</p>
+      <div class="cta-btns">
+        <a href="#" class="btn-cta-white">Gabung Sekarang <i class="fas fa-arrow-right" style="margin-left:6px;"></i></a>
+        <a href="#program" class="btn-cta-ghost">Lihat Program</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="footer">
+  <div class="container">
+    <div class="footer-main">
+      <div>
+        <div class="footer-brand-text">
+          <div class="footer-brand-icon"><i class="fas fa-graduation-cap"></i></div>
+          Akademia
+        </div>
+        <p class="footer-desc">Portal mahasiswa modern untuk masa depan akademik yang lebih cerah. Kami berkomitmen menghadirkan pendidikan berkualitas tinggi dan terjangkau.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-btn"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="social-btn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" class="social-btn"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Menu Cepat</div>
+        <ul class="footer-links">
+          <li><a href="#hero">Beranda</a></li>
+          <li><a href="#keunggulan">Tentang Kami</a></li>
+          <li><a href="#program">Program Studi</a></li>
+          <li><a href="#kegiatan">Kegiatan</a></li>
+          <li><a href="#testimoni">Prestasi</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Program</div>
+        <ul class="footer-links">
+          <li><a href="#">Teknik Informatika</a></li>
+          <li><a href="#">Sistem Informasi</a></li>
+          <li><a href="#">Manajemen</a></li>
+          <li><a href="#">DKV</a></li>
+          <li><a href="#">Teknik Industri</a></li>
+          <li><a href="#">Akuntansi</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Kontak</div>
+        <div class="footer-contact-item">
+          <i class="fas fa-map-marker-alt"></i>
+          <span>Jl. Pendidikan No. 1, Jakarta Selatan, DKI Jakarta 12345</span>
+        </div>
+        <div class="footer-contact-item">
+          <i class="fas fa-phone"></i>
+          <span>(021) 1234-5678</span>
+        </div>
+        <div class="footer-contact-item">
+          <i class="fas fa-envelope"></i>
+          <span>info@akademia.ac.id</span>
+        </div>
+        <div class="footer-contact-item">
+          <i class="fas fa-clock"></i>
+          <span>Senin – Jumat, 08.00 – 17.00 WIB</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2024 Akademia. Seluruh hak cipta dilindungi.</span>
+      <div class="footer-bottom-links">
+        <a href="#">Kebijakan Privasi</a>
+        <a href="#">Syarat & Ketentuan</a>
+        <a href="#">Peta Situs</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- BACK TO TOP -->
+<button id="backTop" aria-label="Kembali ke atas"><i class="fas fa-arrow-up"></i></button>
+
+<script>
+  // Navbar scroll effect
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 20);
+  });
+
+  // Back to top
+  const backTop = document.getElementById('backTop');
+  window.addEventListener('scroll', () => {
+    backTop.classList.toggle('visible', window.scrollY > 400);
+  });
+  backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  // Mobile hamburger
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const mobileOverlay = document.getElementById('mobileOverlay');
+  function toggleMenu(open) {
+    mobileMenu.classList.toggle('open', open);
+    mobileOverlay.classList.toggle('open', open);
+  }
+  hamburger.addEventListener('click', () => {
+    const isOpen = mobileMenu.classList.contains('open');
+    toggleMenu(!isOpen);
+  });
+  mobileOverlay.addEventListener('click', () => toggleMenu(false));
+  document.querySelectorAll('.mobile-link').forEach(link => {
+    link.addEventListener('click', () => toggleMenu(false));
+  });
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll(
+    '.stat-card, .keunggulan-card, .program-card, .kegiatan-item, .testi-card'
+  );
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  revealEls.forEach((el, i) => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(28px)';
+    el.style.transition = `opacity .5s ease ${(i % 4) * 0.08}s, transform .5s ease ${(i % 4) * 0.08}s`;
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
